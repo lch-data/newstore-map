@@ -5,6 +5,7 @@ import { Store } from "@/lib/stores";
 import { SAMPLE_STORES } from "@/lib/stores";
 import { loadStores, saveStores } from "@/lib/db";
 import { geocodeAddress } from "@/lib/geocode";
+import { getAuthUser, isAdmin } from "@/lib/auth";
 
 
 const CATEGORIES = ["카페", "음식", "미용", "헬스", "기타"] as const;
@@ -22,6 +23,7 @@ function makeId() {
 }
 
 export default function AdminPage() {
+  const [allowed, setAllowed] = useState<boolean | null>(null);
   const [stores, setStores] = useState<Store[]>([]);
   const [form, setForm] = useState({
     name: "",
@@ -40,9 +42,16 @@ export default function AdminPage() {
   const [geoLoading, setGeoLoading] = useState(false);
 
   useEffect(() => {
+    const u = getAuthUser();
+    setAllowed(isAdmin(u));
+  }, []);
+
+  useEffect(() => {
+    if (allowed === false) return;
+    if (allowed === null) return;
     const loaded = loadStores(SAMPLE_STORES);
     setStores(loaded);
-  }, []);
+  }, [allowed]);
 
   const total = stores.length;
 
@@ -132,6 +141,34 @@ export default function AdminPage() {
     setStores(SAMPLE_STORES);
     saveStores(SAMPLE_STORES);
     alert("초기화 완료했습니다.");
+  }
+
+  if (allowed === false) {
+    return (
+      <div className="grid">
+        <section className="card">
+          <h2>관리자 전용</h2>
+          <div style={{ color: "var(--muted)", marginTop: 8 }}>
+            관리자 계정으로 로그인해야 접근 가능합니다. (admin / admin)
+          </div>
+          <div className="controls" style={{ marginTop: 16 }}>
+            <a className="button" href="/login">로그인</a>
+            <a className="button" href="/">홈으로</a>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (allowed === null) {
+    return (
+      <div className="grid">
+        <section className="card">
+          <h2>확인 중...</h2>
+          <div className="muted">관리자 권한 확인 중입니다.</div>
+        </section>
+      </div>
+    );
   }
 
   return (

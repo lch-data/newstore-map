@@ -1,34 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-
-type User = { name: string };
-
-function getStoredUser(): User | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem("mvp:user");
-    return raw ? (JSON.parse(raw) as User) : null;
-  } catch {
-    return null;
-  }
-}
-
-function setStoredUser(user: User | null) {
-  if (typeof window === "undefined") return;
-  if (!user) window.localStorage.removeItem("mvp:user");
-  else window.localStorage.setItem("mvp:user", JSON.stringify(user));
-}
+import { AuthUser, clearAuthUser, getAuthUser, isAdmin } from "@/lib/auth";
 
 export default function SidebarShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
-    setUser(getStoredUser());
+    setUser(getAuthUser());
   }, []);
 
   useEffect(() => {
@@ -37,24 +21,21 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
   }, [pathname]);
 
   const menu = useMemo(() => {
-    return [
+    const base = [
       { href: "/", label: "홈" },
       { href: "/map", label: "지도 보기" },
       { href: "/bookmarks", label: "내 즐겨찾기 리스트" },
-      { href: "/admin", label: "admin" },
     ];
-  }, []);
-
-  function onLogin() {
-    // 컨셉용 임시 로그인
-    const next = { name: "게스트" };
-    setStoredUser(next);
-    setUser(next);
-  }
+    if (isAdmin(user)) {
+      base.push({ href: "/admin", label: "관리자" });
+    }
+    return base;
+  }, [user]);
 
   function onLogout() {
-    setStoredUser(null);
+    clearAuthUser();
     setUser(null);
+    router.push("/");
   }
 
   return (
@@ -99,9 +80,14 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
           <div className="sidebarSectionTitle">계정</div>
 
           {!user ? (
-            <button className="button full" onClick={onLogin}>
-              로그인
-            </button>
+            <div className="accountBox">
+              <Link className="button full" href="/login">
+                로그인
+              </Link>
+              <Link className="button full" href="/register">
+                회원가입
+              </Link>
+            </div>
           ) : (
             <div className="accountBox">
               <div className="accountLine">
@@ -119,6 +105,11 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
               <Link className="button full" href="/bookmarks">
                 내 즐겨찾기 리스트
               </Link>
+              {!isAdmin(user) && (
+                <div className="muted" style={{ fontSize: 12 }}>
+                  관리자 기능은 admin 계정으로 로그인 시 노출돼요.
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -9,6 +9,11 @@ export default function StoreDetailPage() {
   const params = useParams<{ id: string }>();
   const id = params?.id;
   const [tick, setTick] = useState(0);
+  const [ownerIntro, setOwnerIntro] = useState("");
+  const [menuNote, setMenuNote] = useState("");
+  const [repPhotos, setRepPhotos] = useState<string[]>([]);
+  const [interiorPhotos, setInteriorPhotos] = useState<string[]>([]);
+  const [menuPhotos, setMenuPhotos] = useState<string[]>([]);
 
   const store = useMemo(() => {
     return SAMPLE_STORES.find((s) => s.id === id);
@@ -96,6 +101,117 @@ export default function StoreDetailPage() {
           </ul>
         </div>
       </aside>
+
+      <section className="card" style={{ gridColumn: "1 / -1" }}>
+        <h2>점주님 업로드 존 (컨셉)</h2>
+        <div className="muted" style={{ marginBottom: 10, lineHeight: 1.6 }}>
+          사진/소개/메뉴판을 올리면 상세 하단에 노출돼요. 지금은 로컬 상태만 보이는 컨셉입니다.
+        </div>
+
+        <div className="controls" style={{ flexWrap: "wrap", gap: 12, marginBottom: 10 }}>
+          <label className="button" style={{ cursor: "pointer" }}>
+            대표사진 업로드
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const names = Array.from(e.target.files ?? []).map((f) => f.name);
+                setRepPhotos(names);
+              }}
+            />
+          </label>
+          <label className="button" style={{ cursor: "pointer" }}>
+            인테리어/메뉴 사진
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const names = Array.from(e.target.files ?? []).map((f) => f.name);
+                setInteriorPhotos(names);
+              }}
+            />
+          </label>
+          <label className="button" style={{ cursor: "pointer" }}>
+            메뉴판 업로드
+            <input
+              type="file"
+              accept="image/*,.pdf"
+              multiple
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const names = Array.from(e.target.files ?? []).map((f) => f.name);
+                setMenuPhotos(names);
+              }}
+            />
+          </label>
+        </div>
+
+        <div className="controls" style={{ flexDirection: "column", gap: 10, alignItems: "stretch" }}>
+          <textarea
+            className="input"
+            style={{ height: 80, width: "100%", resize: "vertical" }}
+            placeholder="대표 소개글 (예: 시그니처, 운영시간, 주차/포장/배달 안내 등)"
+            value={ownerIntro}
+            onChange={(e) => setOwnerIntro(e.target.value)}
+          />
+          <textarea
+            className="input"
+            style={{ height: 70, width: "100%", resize: "vertical" }}
+            placeholder="메뉴판 텍스트 (가격/추천 메뉴)"
+            value={menuNote}
+            onChange={(e) => setMenuNote(e.target.value)}
+          />
+        </div>
+
+        <div style={{ marginTop: 12, display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
+          <div className="card" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div className="muted" style={{ marginBottom: 6 }}>대표사진</div>
+            {repPhotos.length === 0 ? (
+              <div className="muted">업로드된 대표사진이 없어요.</div>
+            ) : (
+              <ul className="muted">
+                {repPhotos.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="card" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div className="muted" style={{ marginBottom: 6 }}>인테리어/메뉴 사진</div>
+            {interiorPhotos.length === 0 ? (
+              <div className="muted">업로드된 사진이 없어요.</div>
+            ) : (
+              <ul className="muted">
+                {interiorPhotos.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="card" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div className="muted" style={{ marginBottom: 6 }}>메뉴판 파일</div>
+            {menuPhotos.length === 0 ? (
+              <div className="muted">업로드된 메뉴판이 없어요.</div>
+            ) : (
+              <ul className="muted">
+                {menuPhotos.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        <div className="muted" style={{ marginTop: 12, fontSize: 12 }}>
+          현재는 로컬 상태로만 보이며 저장/배포되지 않습니다. (컨셉용)
+        </div>
+      </section>
     </div>
   );
 }

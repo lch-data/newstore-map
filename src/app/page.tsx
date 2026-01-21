@@ -167,29 +167,37 @@ export default function HomePage() {
           </div>
 
           <div className="filtersRow">
-            <select
-              className="select"
-              value={region}
-              onChange={(e) => setRegion(e.target.value as any)}
-            >
-              {REGIONS.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
+            <div style={{ display: "grid", gap: 4 }}>
+              <span className="muted" style={{ fontSize: 12 }}>지역</span>
+              <select
+                className="select"
+                aria-label="지역 필터"
+                value={region}
+                onChange={(e) => setRegion(e.target.value as any)}
+              >
+                {REGIONS.map((r) => (
+                  <option key={r} value={r}>
+                    {r === "전체" ? "지역 전체" : r}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <select
-              className="select"
-              value={category}
-              onChange={(e) => setCategory(e.target.value as any)}
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+            <div style={{ display: "grid", gap: 4 }}>
+              <span className="muted" style={{ fontSize: 12 }}>업종</span>
+              <select
+                className="select"
+                aria-label="업종 필터"
+                value={category}
+                onChange={(e) => setCategory(e.target.value as any)}
+              >
+                {CATEGORIES.map((c) => (
+                  <option key={c} value={c}>
+                    {c === "전체" ? "업종 전체" : c}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="controls">
