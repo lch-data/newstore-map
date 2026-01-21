@@ -74,6 +74,17 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
               );
             })}
           </nav>
+
+          {isAdmin(user) && (
+            <div style={{ marginTop: 10 }}>
+              <div className="muted" style={{ fontSize: 12, marginBottom: 6 }}>
+                관리자 계정으로 로그인 중
+              </div>
+              <button className="button full" onClick={onLogout}>
+                관리자 로그아웃
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="sidebarSection">

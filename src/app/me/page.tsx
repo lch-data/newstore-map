@@ -47,7 +47,7 @@ export default function MePage() {
         <h2>내정보수정 (임시)</h2>
         {!user && (
           <div className="muted" style={{ lineHeight: 1.7 }}>
-            아직 로그인 전이야. 왼쪽 사이드바에서 로그인 버튼을 눌러줘!
+            아직 로그인 전이야. 왼쪽 사이드바에서 로그인 버튼을 눌러주세요.
           </div>
         )}
 
