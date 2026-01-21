@@ -16,7 +16,7 @@ export default function BookmarksPage() {
   return (
     <div className="grid">
       <section className="card">
-        <h2>북마크한 신규 매장</h2>
+        <h2>즐겨찾기한 신규 매장</h2>
 
         <div className="controls" style={{ marginBottom: 12 }}>
           <button className="button" onClick={() => setTick((v) => v + 1)}>
@@ -32,7 +32,7 @@ export default function BookmarksPage() {
       <aside className="card">
         <h2>팁</h2>
         <div style={{ color: "var(--muted)", lineHeight: 1.7 }}>
-          홈/지도/상세에서 ☆(북마크)를 누르면 여기에 모여.
+          홈/지도/상세에서 ☆(즐겨찾기)를 누르면 여기에 모여.
           <br />
           다음 단계에서 “공유 링크”도 만들 수 있어.
         </div>

@@ -78,7 +78,7 @@ export default function StoreDetailPage() {
 
         <div className="controls" style={{ marginTop: 18 }}>
           <a className="button" href="/map">지도에서 보기</a>
-          <a className="button" href="/bookmarks">북마크</a>
+          <a className="button" href="/bookmarks">즐겨찾기 리스트</a>
           <a className="button" href="/">홈으로</a>
         </div>
 

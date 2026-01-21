@@ -40,8 +40,8 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
     return [
       { href: "/", label: "홈" },
       { href: "/map", label: "지도 보기" },
-      { href: "/bookmarks", label: "내 북마크" },
-      { href: "/admin", label: "관리자" },
+      { href: "/bookmarks", label: "내 즐겨찾기 리스트" },
+      { href: "/admin", label: "admin" },
     ];
   }, []);
 
@@ -117,14 +117,14 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
                 </button>
               </div>
               <Link className="button full" href="/bookmarks">
-                내 북마크 리스트
+                내 즐겨찾기 리스트
               </Link>
             </div>
           )}
         </div>
 
         <div className="sidebarFooter muted">
-          MVP · (지도 API는 추후 네이버/카카오로 교체 예정)
+          MVP · (지도 API는 추후 네이버/카카오로 교체 가능)
         </div>
       </aside>
 

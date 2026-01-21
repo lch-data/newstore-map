@@ -74,7 +74,7 @@ export default function AdminPage() {
   async function onGeocode() {
     const addr = form.address.trim();
     if (addr.length < 2) {
-      alert("주소를 먼저 입력해줘!");
+      alert("주소를 먼저 입력해주세요.");
       return;
     }
   
@@ -85,7 +85,7 @@ export default function AdminPage() {
       const result = await geocodeAddress(addr);
   
       if (!result) {
-        setGeoStatus("좌표를 찾지 못했어. 주소를 더 자세히 써줘! (예: 서울 마포구 양화로 12)");
+        setGeoStatus("좌표를 찾지 못했어요. 주소를 더 자세히 써주세요. (예: 서울 마포구 양화로 12)");
         return;
       }
   
@@ -124,14 +124,14 @@ export default function AdminPage() {
     setStores(next);
     saveStores(next);
     resetForm();
-    alert("추가 완료! 홈/지도에서 확인해봐.");
+    alert("추가 완료 홈/지도에서 확인해보세요.");
   }
 
   function onResetToSample() {
-    if (!confirm("샘플 데이터로 초기화할까? (내가 추가한 매장 데이터가 삭제돼)")) return;
+    if (!confirm("샘플 데이터로 초기화할까요? (내가 추가한 매장 데이터가 삭제돼요)")) return;
     setStores(SAMPLE_STORES);
     saveStores(SAMPLE_STORES);
-    alert("초기화 완료!");
+    alert("초기화 완료했습니다.");
   }
 
   return (
@@ -260,7 +260,7 @@ export default function AdminPage() {
       <aside className="card">
         <h2>다음 단계</h2>
         <div style={{ color: "var(--muted)", lineHeight: 1.7 }}>
-          지금은 “가짜 관리자” 페이지로 로컬 저장만 해.
+          지금은 “가짜 관리자” 페이지로 로컬 저장만 합니다.
           <ul>
           <li>그 다음: 지도에서 주소 검색 → lat/lng 자동 입력</li>
             <li>마지막: Supabase/Firebase로 DB 전환</li>

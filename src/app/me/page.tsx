@@ -32,13 +32,13 @@ export default function MePage() {
 
   function onSave() {
     if (name.trim().length < 2) {
-      alert("이름은 2글자 이상으로 입력해줘!");
+      alert("이름은 2글자 이상으로 입력해주세요.");
       return;
     }
     const next = { name: name.trim() };
     setStoredUser(next);
     setUser(next);
-    alert("저장했어! (컨셉용 로컬 저장)");
+    alert("저장완료 (컨셉용 로컬 저장)");
   }
 
   return (
