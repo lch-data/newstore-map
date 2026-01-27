@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { AuthUser, saveAuthUser } from "@/lib/auth";
+import { AuthUser, saveAuthUser, getAllUsers, saveAllUsers } from "@/lib/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -30,8 +30,15 @@ export default function RegisterPage() {
       return;
     }
 
-    const user: AuthUser = { username: form.username, name: form.name, role: "user" };
-    saveAuthUser(user); // 컨셉: 회원가입 후 자동 로그인
+    const users = getAllUsers();
+    if (users.some((u) => u.username === form.username)) {
+      setError("이미 존재하는 아이디입니다.");
+      return;
+    }
+
+    const newUser: AuthUser = { username: form.username, name: form.name, role: "user" };
+    saveAllUsers([...users, newUser]);
+    saveAuthUser(newUser); // 컨셉: 회원가입 후 자동 로그인
     router.push("/");
   }
 

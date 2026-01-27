@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AuthUser, getAuthUser, saveAuthUser } from "@/lib/auth";
+import { AuthUser, getAuthUser, saveAuthUser, isAdmin } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,15 +26,27 @@ export default function LoginPage() {
       return;
     }
 
-    let user: AuthUser;
+    let user: AuthUser | null = null;
     if (username === "admin" && password === "admin") {
       user = { username, name: "관리자", role: "admin" };
-    } else {
+    } else if (username === "user" && password === "user") { // 임시 일반 사용자 계정
       user = { username, name: username, role: "user" };
+    } else if (username === "store" && password === "store") { // 임시 점주 계정
+      user = { username, name: "점주(테스트)", role: "store", storeId: "test-store-id" };
     }
 
-    saveAuthUser(user);
-    router.push("/");
+    if (user) {
+      saveAuthUser(user);
+      if (isAdmin(user)) {
+        router.push("/admin");
+      } else if (user.role === "store" && user.storeId) {
+        router.push(`/stores/${user.storeId}/edit`);
+      } else {
+        router.push("/");
+      }
+    } else {
+      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+    }
   }
 
   return (

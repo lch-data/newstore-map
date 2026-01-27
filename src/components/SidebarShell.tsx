@@ -13,14 +13,14 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     setUser(getAuthUser());
-  }, []);
+  }, [pathname]); // pathname이 변경될 때마다 user 상태를 다시 불러옴
 
   useEffect(() => {
     // 라우트 이동 시 모바일 사이드바 닫기
     setSidebarOpen(false);
   }, [pathname]);
 
-  const menu = useMemo(() => {
+    const menu = useMemo(() => {
     const base = [
       { href: "/", label: "홈" },
       { href: "/map", label: "지도 보기" },
@@ -28,6 +28,9 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
     ];
     if (isAdmin(user)) {
       base.push({ href: "/admin", label: "관리자" });
+      base.push({ href: "/admin/users", label: "회원 목록" });
+    } else if (user?.role === "store" && user.storeId) {
+      base.push({ href: `/stores/${user.storeId}/edit`, label: "매장 정보 수정" });
     }
     return base;
   }, [user]);
@@ -66,7 +69,7 @@ export default function SidebarShell({ children }: { children: React.ReactNode }
           <div className="sidebarSectionTitle">메뉴</div>
           <nav className="sidebarNav">
             {menu.map((m) => {
-              const active = m.href === "/" ? pathname === "/" : pathname.startsWith(m.href);
+              const active = m.href === pathname || (m.href === "/admin" && pathname.startsWith("/admin"));
               return (
                 <Link key={m.href} href={m.href} className={`navItem ${active ? "active" : ""}`}>
                   {m.label}
